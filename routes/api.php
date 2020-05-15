@@ -51,6 +51,7 @@ Route::group(['middleware' => ['api', 'cors', 'auth.jwt']], function () {
 // get ShoppingListById
     Route::get('shoppinglist/{id}', 'ShoppinglistController@findShoppinglistById');
     Route::put('shoppinglist/{id}/addComment', 'ShoppinglistController@addComment');
+    Route::get('user/{id}', 'ShoppinglistController@getUsernameById');
 
     Route::post('auth/logout', 'Auth\ApiAuthController@logout');
 });

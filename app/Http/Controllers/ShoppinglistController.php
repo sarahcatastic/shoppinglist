@@ -52,6 +52,14 @@ class ShoppinglistController extends Controller
         return $shoppinglist;
     }
 
+    public function getUsernameById($id):User
+    {
+        // where gibt mehrere zurück, first beschneidet es auf das erste
+        // auch wenn id eigentlich unique ist
+        $user = user::where('id', $id)->with('adress')->first();
+        return $user;
+    }
+
     public function findShoppingListsByCreator() {
         $user = JWTAuth::parseToken()->authenticate();
         $shoppinglists = ShoppingList::with(['creator', 'comments', 'items'])
