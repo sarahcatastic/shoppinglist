@@ -27,7 +27,10 @@ class ShoppinglistController extends Controller
         $shoppinglists = ShoppingList::where(function ($query) {
             $query->where('status', '=', 'Beantragt')->where('volunteer_id', '=', null);})
             ->orWhere(function ($query) use ($user) {
-                $query->where('status', '=', 'Beantragt')->where('volunteer_id', '=', $user['id']);
+                $query->where('status', '=', 'Gebucht')->where('volunteer_id', '=', $user['id']);
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('status', '=', 'Abgeschlossen')->where('volunteer_id', '=', $user['id']);
             })
             /*
             ->orWhere(['status', 'Bestellt'], ['volunteer_id', $user['id']])
@@ -277,7 +280,34 @@ class ShoppinglistController extends Controller
 
             if ($shoppinglist != null) {
                 $request = $this->parseRequest($request);
-                $shoppinglist->update(['volunteer_id' => $user['id'], 'status' => 'Angenommen']);
+                $shoppinglist->update(['volunteer_id' => $user['id'], 'status' => 'Gebucht']);
+
+            }
+            $shoppinglist->save();
+            DB::commit();
+            $shoppinglist1 = ShoppingList::with(['volunteer', 'comments', 'items'])
+                ->where('id', $id)->first();
+            // return a vaild http response
+            return response()->json($shoppinglist1, 201);
+        }
+        catch (\Exception $e) {
+            // rollback all queries
+            DB::rollBack();
+            return response()->json("updating shoppinglist failed: " . $e->getMessage(), 420);
+        }
+    }
+
+    public function closeShoppinglist(Request $request, $id) : JsonResponse
+    {
+        $user = JWTAuth::parseToken()->authenticate();
+        DB::beginTransaction();
+        try {
+            $shoppinglist = ShoppingList::with(['volunteer', 'comments', 'items'])
+                ->where('id', $id)->first();
+
+            if ($shoppinglist != null) {
+                $request = $this->parseRequest($request);
+                $shoppinglist->update(['volunteer_id' => $user['id'], 'status' => 'Abgeschlossen']);
 
             }
             $shoppinglist->save();

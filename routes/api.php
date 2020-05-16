@@ -50,7 +50,7 @@ Route::group(['middleware' => ['api','cors']], function () {
 Route::group(['middleware' => ['api', 'cors', 'auth.jwt']], function () {
 
 // get ShoppingListById
-    Route::get('shoppinglist/{id}', 'ShoppinglistController@findShoppinglistById');
+
     Route::put('shoppinglist/{id}/addComment', 'ShoppinglistController@addComment');
     Route::get('user/{id}', 'ShoppinglistController@getUsernameById');
 
@@ -62,6 +62,7 @@ Route::group(['middleware' => ['api', 'cors', 'auth.jwt', 'creator.jwt']], funct
 
     // save new Shoppinglist
     Route::post('shoppinglist', 'ShoppinglistController@save');
+    Route::get('shoppinglist/{id}', 'ShoppinglistController@findShoppinglistById');
     //update shoppinglist
     Route::put('shoppinglist/{id}/edit', 'ShoppinglistController@edit');
     Route::put('shoppinglist/{id}/send', 'ShoppinglistController@sendShoppinglist');
@@ -73,7 +74,10 @@ Route::group(['middleware' => ['api', 'cors', 'auth.jwt', 'creator.jwt']], funct
 // Volunteer rights
 Route::group(['middleware' => ['api', 'cors', 'auth.jwt', 'volunteer.jwt']], function () {
     Route::get('shoppinglists/all', 'ShoppinglistController@index');
+    Route::get('/shoppinglists/all/{id}', 'ShoppinglistController@findShoppinglistById');
+    Route::get('/shoppinglists/myshops/{id}', 'ShoppinglistController@findShoppinglistById');
     Route::get('shoppinglists/myShops', 'ShoppinglistController@findShoppinglistsByVolunteer');
-    Route::get('shoppinglist/{id}/book', 'ShoppinglistController@bookShoppinglist');
+    Route::put('shoppinglists/all/{id}/book', 'ShoppinglistController@bookShoppinglist');
+    Route::put('shoppinglists/all/{id}/close', 'ShoppinglistController@closeShoppinglist');
     Route::put('shoppinglist/{id}/update', 'ShoppinglistController@updateVolunteer');
 });
