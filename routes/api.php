@@ -53,6 +53,8 @@ Route::group(['middleware' => ['api', 'cors', 'auth.jwt']], function () {
 
     Route::put('shoppinglist/{id}/addComment', 'ShoppinglistController@addComment');
     Route::get('user/{id}', 'ShoppinglistController@getUsernameById');
+    Route::get('user/adress/{id}', 'ShoppinglistController@getAdressOfUserById');
+    Route::get('comment/{id}', 'ShoppinglistController@getCreatorOfComment');
 
     Route::post('auth/logout', 'Auth\ApiAuthController@logout');
 });

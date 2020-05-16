@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adress;
 use App\ShoppingList;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -60,6 +61,22 @@ class ShoppinglistController extends Controller
         // where gibt mehrere zurück, first beschneidet es auf das erste
         // auch wenn id eigentlich unique ist
         $user = user::where('id', $id)->with('adress')->first();
+        return $user;
+    }
+
+    public function getAdressOfUserById($id):Adress
+    {
+        // where gibt mehrere zurück, first beschneidet es auf das erste
+        // auch wenn id eigentlich unique ist
+        $adress = adress::where('id', $id)->first();
+        return $adress;
+    }
+
+    public function getCreatorOfComment($id):User
+    {
+        // where gibt mehrere zurück, first beschneidet es auf das erste
+        // auch wenn id eigentlich unique ist
+        $user = user::where('id', $id)->first();
         return $user;
     }
 
