@@ -25,9 +25,9 @@ class ShoppinglistController extends Controller
         //$shoppinglists = DB::table('shoppinglists')->get();
         // /*->where('volunteer_id', '=', $user['id'])*/
         $shoppinglists = ShoppingList::where(function ($query) {
-            $query->where('status', '=', 'Bestellt')->where('volunteer_id', '=', null);})
+            $query->where('status', '=', 'Beantragt')->where('volunteer_id', '=', null);})
             ->orWhere(function ($query) use ($user) {
-                $query->where('status', '=', 'Bestellt')->where('volunteer_id', '=', $user['id']);
+                $query->where('status', '=', 'Beantragt')->where('volunteer_id', '=', $user['id']);
             })
             /*
             ->orWhere(['status', 'Bestellt'], ['volunteer_id', $user['id']])
@@ -50,6 +50,14 @@ class ShoppinglistController extends Controller
         // auch wenn id eigentlich unique ist
         $shoppinglist = shoppinglist::where('id', $id)->with('creator', 'volunteer', 'comments', 'items')->first();
         return $shoppinglist;
+    }
+
+    public function getUsernameById($id):User
+    {
+        // where gibt mehrere zurück, first beschneidet es auf das erste
+        // auch wenn id eigentlich unique ist
+        $user = user::where('id', $id)->with('adress')->first();
+        return $user;
     }
 
     public function findShoppingListsByCreator() {

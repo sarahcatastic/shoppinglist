@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 */
 
 
-
 Route::get('shoppinglists', 'ShoppinglistController@index');
 
 // get ShoppingListById
@@ -43,20 +42,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware' => ['api','cors']], function () {
   //  Route::post('auth/register', 'Auth\RegisterController@create');
     Route::post('auth/login', 'Auth\ApiAuthController@login');
+
+    // get User
+    Route::get('auth/getUser/{id}', 'Auth\ApiAuthController@getAuthUser');
 });
 
 Route::group(['middleware' => ['api', 'cors', 'auth.jwt']], function () {
 
-
 // get ShoppingListById
     Route::get('shoppinglist/{id}', 'ShoppinglistController@findShoppinglistById');
     Route::put('shoppinglist/{id}/addComment', 'ShoppinglistController@addComment');
+    Route::get('user/{id}', 'ShoppinglistController@getUsernameById');
 
     Route::post('auth/logout', 'Auth\ApiAuthController@logout');
 });
 
-// Crator rights
+// Creator rights
 Route::group(['middleware' => ['api', 'cors', 'auth.jwt', 'creator.jwt']], function () {
+
     // save new Shoppinglist
     Route::post('shoppinglist', 'ShoppinglistController@save');
     //update shoppinglist
