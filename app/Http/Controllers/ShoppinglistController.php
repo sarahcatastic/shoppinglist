@@ -25,9 +25,9 @@ class ShoppinglistController extends Controller
         //$shoppinglists = DB::table('shoppinglists')->get();
         // /*->where('volunteer_id', '=', $user['id'])*/
         $shoppinglists = ShoppingList::where(function ($query) {
-            $query->where('status', '=', 'Bestellt')->where('volunteer_id', '=', null);})
+            $query->where('status', '=', 'Beantragt')->where('volunteer_id', '=', null);})
             ->orWhere(function ($query) use ($user) {
-                $query->where('status', '=', 'Bestellt')->where('volunteer_id', '=', $user['id']);
+                $query->where('status', '=', 'Beantragt')->where('volunteer_id', '=', $user['id']);
             })
             /*
             ->orWhere(['status', 'Bestellt'], ['volunteer_id', $user['id']])
