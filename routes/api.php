@@ -40,37 +40,33 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // without login
 Route::group(['middleware' => ['api','cors']], function () {
-  //  Route::post('auth/register', 'Auth\RegisterController@create');
     Route::post('auth/login', 'Auth\ApiAuthController@login');
-
     // get User
     Route::get('auth/getUser/{id}', 'Auth\ApiAuthController@getAuthUser');
 });
 
 Route::group(['middleware' => ['api', 'cors', 'auth.jwt']], function () {
 
-// get ShoppingListById
-
-    Route::put('shoppinglist/{id}/addComment', 'ShoppinglistController@addComment');
     Route::get('user/{id}', 'ShoppinglistController@getUsernameById');
     Route::get('user/adress/{id}', 'ShoppinglistController@getAdressOfUserById');
     Route::get('comment/{id}', 'ShoppinglistController@getCreatorOfComment');
-
+    Route::put('shoppinglist/{id}/addComment', 'ShoppinglistController@addComment');
     Route::post('auth/logout', 'Auth\ApiAuthController@logout');
 });
 
 // Creator rights
 Route::group(['middleware' => ['api', 'cors', 'auth.jwt', 'creator.jwt']], function () {
 
-    // save new Shoppinglist
-    Route::post('shoppinglist', 'ShoppinglistController@save');
+    // get ShoppinglisByUser
+    Route::get('shoppinglists/myLists', 'ShoppinglistController@findShoppinglistsByCreator');
     Route::get('shoppinglist/{id}', 'ShoppinglistController@findShoppinglistById');
     //update shoppinglist
     Route::put('shoppinglist/{id}/edit', 'ShoppinglistController@edit');
     Route::put('shoppinglist/{id}/send', 'ShoppinglistController@sendShoppinglist');
+    // save new Shoppinglist
+    Route::post('shoppinglist', 'ShoppinglistController@save');
     Route::delete('shoppinglist/{id}', 'ShoppinglistController@delete');
-    // get ShoppinglisByUser
-    Route::get('shoppinglists/myLists', 'ShoppinglistController@findShoppinglistsByCreator');
+
 });
 
 // Volunteer rights
